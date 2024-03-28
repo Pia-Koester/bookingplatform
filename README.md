@@ -90,7 +90,6 @@ The naming of membership Plans might be a little bit confusing. What these mean 
 To create a new membership plan, admins must send a POST request to the `/api/membershipPlans/create` endpoint with the following JSON data in the request body:
 
 ```json
-
 {
 "title": "10-Class Pass",
 "price": 100,
