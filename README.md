@@ -87,9 +87,9 @@ The naming of membership Plans might be a little bit confusing. What these mean 
 
 #### Creating new membership plans
 
-To create a new membership plan, admins must send a POST request to the `/api/membershipPlans/create`` endpoint with the following JSON data in the request body:
+To create a new membership plan, admins must send a POST request to the `/api/membershipPlans/create` endpoint with the following JSON data in the request body:
 
-``json
+```json
 
 {
 "title": "10-Class Pass",
@@ -97,16 +97,16 @@ To create a new membership plan, admins must send a POST request to the `/api/me
 "totalCredits": 10,
 "validity": 30,
 "bookableType": "615f5e2e13fc2d00166c3500"
-}``
+}```
 
 #### Get Membership Plans
 
-To retrieve all available membership plans, clients can send a GET request to the `/api/membershipPlans`` endpoint.
+To retrieve all available membership plans, clients can send a GET request to the `/api/membershipPlans` endpoint.
 
 #### Get single Membership Plan
 
-To retrieve a specific membership plan, clients can send a GET request to the `/api/membershipPlans/:id`` endpoint, where :id is the MongoDB ID of the membership plan.
+To retrieve a specific membership plan, clients can send a GET request to the `/api/membershipPlans/:id` endpoint, where :id is the MongoDB ID of the membership plan.
 
 #### Update Membership Plan
 
-To update a membership plan, admins must send a PUT request to the `/api/membershipPlans/update/:id`` endpoint with the updated plan details in the request body.
+To update a membership plan, admins must send a PUT request to the `/api/membershipPlans/update/:id` endpoint with the updated plan details in the request body.
