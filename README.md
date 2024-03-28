@@ -41,7 +41,7 @@ If user has been successfully created 201 with the new user data will be send.
 
 ### Activities
 
-### Creation
+#### Creation
 
 To create a new activity, clients must send a POST request to the /api/activities endpoint with the following JSON data in the request body:
 
@@ -57,7 +57,8 @@ To create a new activity, clients must send a POST request to the /api/activitie
 }
 ```
 
-### Get Activities
+#### Get Activities
+
 To retrieve activities, clients can send a GET request to the /api/activities endpoint. Optionally, clients can filter activities by specifying query parameters:
 
 - instructor: Filter activities by instructor ID.
@@ -66,3 +67,10 @@ To retrieve activities, clients can send a GET request to the /api/activities en
 - type: Filter activities by activity type ID.
 
 The response will contain a list of activities matching the specified filters.
+
+#### Booking and Cancelation
+
+To book a user for an activity, send a PUT request to /api/activities/:activity_id with the user ID in the request body.
+To cancel a user's booking for an activity, send a PUT request to /api/activities/:activity_id/cancel with the user ID in the request body.
+Admin Update
+Admins can update activity details by sending a PUT request to /api/activities/admin/:activity_id with the updated activity details.
