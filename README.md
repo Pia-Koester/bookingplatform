@@ -45,6 +45,17 @@ If user has been successfully created 201 with the new user data will be send.
 
 To create a new activity, clients must send a POST request to the /api/activities endpoint with the following JSON data in the request body:
 
+```json
+{
+  "title": "Yoga Class",
+  "description": "A relaxing yoga class for all levels.",
+  "startTime": "2024-04-01T09:00:00Z",
+  "endTime": "2024-04-01T10:00:00Z",
+  "capacity": 20,
+  "instructor": "615f5e2e13fc2d00166c34fd",
+  "type": "615f5e2e13fc2d00166c3500"
+}
+```
 
 ### Get Activities
 To retrieve activities, clients can send a GET request to the /api/activities endpoint. Optionally, clients can filter activities by specifying query parameters:
