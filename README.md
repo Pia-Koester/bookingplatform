@@ -80,3 +80,33 @@ To book a user for an activity, send a PUT request to ` /api/activities/:activit
 To cancel a user's booking for an activity, send a PUT request to `/api/activities/:activity_id/cancel` with the user ID in the request body.
 Admin Update
 Admins can update activity details by sending a PUT request to `/api/activities/admin/:activity_id` with the updated activity details.
+
+### Membership Plans
+
+The naming of membership Plans might be a little bit confusing. What these mean is something which in german we would call 10er Karte. You have a set amount of times you can attend classes during a specific time frame. These memberships make it cheaper to attend compared to paying single price each time.
+
+#### Creating new membership plans
+
+To create a new membership plan, admins must send a POST request to the `/api/membershipPlans/create`` endpoint with the following JSON data in the request body:
+
+``json
+
+{
+"title": "10-Class Pass",
+"price": 100,
+"totalCredits": 10,
+"validity": 30,
+"bookableType": "615f5e2e13fc2d00166c3500"
+}``
+
+#### Get Membership Plans
+
+To retrieve all available membership plans, clients can send a GET request to the `/api/membershipPlans`` endpoint.
+
+#### Get single Membership Plan
+
+To retrieve a specific membership plan, clients can send a GET request to the `/api/membershipPlans/:id`` endpoint, where :id is the MongoDB ID of the membership plan.
+
+#### Update Membership Plan
+
+To update a membership plan, admins must send a PUT request to the `/api/membershipPlans/update/:id`` endpoint with the updated plan details in the request body.
