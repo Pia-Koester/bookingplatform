@@ -4,6 +4,12 @@
 
 This is the backend to my booking platform for self defense and yoga classes. Class details, membership plans and user date is safed in mongodb.
 
+## 🚀 Getting Started
+
+To access the .env variables this project uses the `Node v20.6.0` build in .env file support. To run it you need to update your Node or install the dotenv package.
+Clone this repository and install dependencies with `npm install`.
+Start the project locally with ` npm run dev`.
+
 ## API
 
 ### Users
@@ -43,7 +49,7 @@ If user has been successfully created 201 with the new user data will be send.
 
 #### Creation
 
-To create a new activity, clients must send a POST request to the /api/activities endpoint with the following JSON data in the request body:
+To create a new activity, clients must send a POST request to the `/api/activities`` endpoint with the following JSON data in the request body:
 
 ```json
 {
@@ -59,18 +65,18 @@ To create a new activity, clients must send a POST request to the /api/activitie
 
 #### Get Activities
 
-To retrieve activities, clients can send a GET request to the /api/activities endpoint. Optionally, clients can filter activities by specifying query parameters:
+To retrieve activities, clients can send a GET request to the `/api/activities` endpoint. Optionally, clients can filter activities by specifying query parameters:
 
 - instructor: Filter activities by instructor ID.
-- mon: Start date range for activities (inclusive) in ISO 8601 format.
-- sun: End date range for activities (inclusive) in ISO 8601 format.
+- start: Start date range for activities (inclusive) in ISO 8601 format.
+- end: End date range for activities (inclusive) in ISO 8601 format.
 - type: Filter activities by activity type ID.
 
 The response will contain a list of activities matching the specified filters.
 
 #### Booking and Cancelation
 
-To book a user for an activity, send a PUT request to /api/activities/:activity_id with the user ID in the request body.
-To cancel a user's booking for an activity, send a PUT request to /api/activities/:activity_id/cancel with the user ID in the request body.
+To book a user for an activity, send a PUT request to ` /api/activities/:activity_id` with the user ID in the request body.
+To cancel a user's booking for an activity, send a PUT request to `/api/activities/:activity_id/cancel` with the user ID in the request body.
 Admin Update
-Admins can update activity details by sending a PUT request to /api/activities/admin/:activity_id with the updated activity details.
+Admins can update activity details by sending a PUT request to `/api/activities/admin/:activity_id` with the updated activity details.
