@@ -96,7 +96,8 @@ To create a new membership plan, admins must send a POST request to the `/api/me
 "totalCredits": 10,
 "validity": 30,
 "bookableType": "615f5e2e13fc2d00166c3500"
-}```
+}
+```
 
 #### Get Membership Plans
 
