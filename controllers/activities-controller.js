@@ -3,6 +3,9 @@ const ErrorResponse = require("../utils/errorResponse.js");
 const asyncWrapper = require("../utils/asyncWrapper.js");
 const mongoose = require("mongoose");
 
+//TO DO: in getActivities there should be NO frauenSV type classes
+// New controller to get all activities in the future with frauenSV
+
 const createActivity = asyncWrapper(async (req, res, next) => {
   //TO DO: Date ranges and repeating circle from frontend should enable admins to create multiple activities at once
   const {
@@ -37,9 +40,9 @@ const createActivity = asyncWrapper(async (req, res, next) => {
 
 //Function to get either all activities or only activties matching the filter from frontend
 const getActivities = asyncWrapper(async (req, res, next) => {
-  const { instructor, mon, sun, type } = req.query;
+  const { instructor, start, end, type } = req.query;
 
-  if (!mon && !sun) {
+  if (!start && !end) {
     const activities = await Activity.find({})
       //   .populate("type")
       //   .populate("instructor")
@@ -50,8 +53,8 @@ const getActivities = asyncWrapper(async (req, res, next) => {
   } else {
     let filter = {
       startTime: {
-        $gte: new Date(mon),
-        $lte: new Date(sun),
+        $gte: new Date(start),
+        $lte: new Date(end),
       },
     };
 
