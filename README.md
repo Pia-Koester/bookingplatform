@@ -91,11 +91,11 @@ To create a new membership plan, admins must send a POST request to the `/api/me
 
 ```json
 {
-"title": "10-Class Pass",
-"price": 100,
-"totalCredits": 10,
-"validity": 30,
-"bookableType": "615f5e2e13fc2d00166c3500"
+  "title": "10-Class Pass",
+  "price": 100,
+  "totalCredits": 10,
+  "validity": 30,
+  "bookableType": "615f5e2e13fc2d00166c3500"
 }
 ```
 
@@ -110,3 +110,25 @@ To retrieve a specific membership plan, clients can send a GET request to the `/
 #### Update Membership Plan
 
 To update a membership plan, admins must send a PUT request to the `/api/membershipPlans/update/:id` endpoint with the updated plan details in the request body.
+
+### User Memberships
+
+#### Creation
+
+After booking a specific membership plan, a new user membership needs to be created. To achieve this, clients must send a POST request to the /api/usermemberships endpoint with the following JSON data in the request body:
+
+```json
+{
+  "membershipPlan": "615f5e2e13fc2d00166c3500",
+  "user": "615f5e2e13fc2d00166c3501",
+  "expiryDate": "2024-12-31"
+}
+```
+
+#### Get User Memberships
+
+To retrieve all user memberships, clients can send a GET request to the `/api/usermemberships` endpoint.
+
+#### Get User Membership by ID
+
+To retrieve a specific user membership by ID, clients can send a GET request to the `/api/usermemberships/:membershipId` endpoint, where :membershipId is the MongoDB ID of the user membership.
