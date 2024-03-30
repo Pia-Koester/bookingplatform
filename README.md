@@ -12,6 +12,8 @@ Start the project locally with ` npm run dev`.
 
 ## API
 
+The deployed version of this api is available: https://artemisbooking.cyclic.app/
+
 ### Users
 
 #### Signup
