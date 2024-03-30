@@ -44,7 +44,7 @@ const getActivities = asyncWrapper(async (req, res, next) => {
 
   if (!start && !end) {
     const activities = await Activity.find({})
-      //   .populate("type")
+      .populate("type")
       //   .populate("instructor")
       .sort({
         startTime: "desc",
@@ -68,7 +68,7 @@ const getActivities = asyncWrapper(async (req, res, next) => {
     }
 
     const activities = await Activity.find(filter)
-      //   .populate("type")
+      .populate("type")
       //   .populate("instructor")
       .sort({
         startTime: "asc",
