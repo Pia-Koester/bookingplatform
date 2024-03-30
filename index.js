@@ -11,6 +11,7 @@ const bodyParser = require("body-parser");
 const userRouter = require("./routes/users-routes.js");
 const activityRouter = require("./routes/activities-routes.js");
 const membershipPlanRouter = require("./routes/membershipPlans-routes.js");
+const userMembershipRouter = require("./routes/userMemberships-routes.js");
 
 //Middlewares
 app.use(express.json({ limit: "200kb" }));
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 app.use("/api", userRouter);
 app.use("/api/activities", activityRouter);
 app.use("/api/membershipplan", membershipPlanRouter); //TO DO: naming in url too long?
+app.use("/api/usermemberships", userMembershipRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);

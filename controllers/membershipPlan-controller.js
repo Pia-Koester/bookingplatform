@@ -1,10 +1,11 @@
-const MembershipPlan = require("../models/membershipPlans-model.js");
+const MembershipPlan = require("../models/membershipPlan-model.js");
 const ErrorResponse = require("../utils/errorResponse.js");
 const asyncWrapper = require("../utils/asyncWrapper.js");
 
 //create new membership plan (like 10er Karte, unlimited offer etc)
 const createMembershipPlan = asyncWrapper(async (req, res, next) => {
-  const { title, price, totalCredits, validity } = req.body;
+  const { title, price, availableCredits, membershipDuration, bookableType } =
+    req.body;
   const plan = await MembershipPlan.create({
     title,
     price,
