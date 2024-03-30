@@ -132,3 +132,22 @@ To retrieve all user memberships, clients can send a GET request to the `/api/us
 #### Get User Membership by ID
 
 To retrieve a specific user membership by ID, clients can send a GET request to the `/api/usermemberships/:membershipId` endpoint, where :membershipId is the MongoDB ID of the user membership.
+
+### Activity Types
+
+Each activity and each membership plan is linked to a specific activity type. Examples are Krav Maga, Yoga or Self Defense for women.
+
+#### Creation
+
+To create a new activity type, clients must send a POST request to the `/api/types` endpoint with the following JSON data in the request body:
+
+```json
+{
+  "type": "Yoga",
+  "images": ["image1.jpg", "image2.jpg"]
+}
+```
+
+#### Get Activity Types
+
+To retrieve all available activity types, clients can send a GET request to the `/api/types` endpoint.
