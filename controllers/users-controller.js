@@ -17,9 +17,13 @@ const createUser = asyncWrapper(async (req, res, next) => {
     registeredActivities,
     termsOfUse,
     dataProtectionInfo,
-    address,
+    street,
+    postalCode,
+    city,
     role = "student",
   } = req.body;
+
+  const address = { street, postalCode, city };
 
   const found = await User.findOne({ email });
   if (found) {
