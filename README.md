@@ -47,6 +47,35 @@ If a users with the same email address already exists a response of 409 will be 
 
 If user has been successfully created 201 with the new user data will be send.
 
+#### Login
+
+To log in, users must send a POST request to the `/api/login` endpoint with their email and password in the request body. Upon successful login, a JWT token will be provided in the response.
+
+Example data:
+
+```json
+{
+  "email": "email@example.com",
+  "password": "123_password_here"
+}
+```
+
+#### Logout
+
+To log out, users must send a GET request to the `/api/logout` endpoint.
+
+#### Profile
+
+To retrieve user profile information, users must send a GET request to the `/api/users/profile` endpoint. Authentication is required, and the request must include a valid JWT token in the Authorization header.
+
+Header example:
+
+```json
+{
+  "authorization": "Bearer xxxxx.yyyyy.zzzzz"
+}
+```
+
 ### Activities
 
 #### Creation
