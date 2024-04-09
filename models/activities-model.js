@@ -42,10 +42,11 @@ const activitySchema = new Schema({
       user: { type: Schema.Types.ObjectId, ref: "User" },
       paymentStatus: {
         type: String,
-        enum: ["pending", "paid card", "paid cash", "membership"],
+        enum: ["pending", "paid card", "paid cash", "paid membership"],
         default: "pending",
       },
     },
+    //TO DO: 10er Karte soll erst abgebucht werden - wenn 24h vor Kursstart nicht abgemeldet
   ],
   trialMembership: { type: Boolean, default: true },
   type: { type: Schema.Types.ObjectId, ref: "Activitytype" },
