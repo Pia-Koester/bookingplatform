@@ -56,7 +56,7 @@ const login = asyncWrapper(async (req, res, next) => {
     .select("+password")
     .populate({
       path: "registeredActivities",
-      // populate: { path: "instructor", model: "Instructor" },
+      populate: { path: "instructor", model: "Instructor" },
     })
     .populate({
       path: "activeMemberships",
@@ -85,13 +85,17 @@ const login = asyncWrapper(async (req, res, next) => {
 
   delete user.password;
 
-  res.json({ token, user });
+  res
+    .cookie("access_token", token, { httpOnly: true, maxAge: 28800000 })
+    .json(user);
 });
 
 //user logout
 //TO DO: token must be removed from local storage in frontend!!!
 const logout = asyncWrapper(async (req, res, next) => {
-  res.json({ success: true });
+  res
+    .cookie("access_token", "", { httpOnly: true, maxAge: 0 })
+    .json({ success: true });
 });
 
 // user information / profile only available after login
