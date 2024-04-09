@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 //Import Routers
 const userRouter = require("./routes/users-routes.js");
@@ -24,6 +25,7 @@ app.use(
   })
 );
 app.use(express.json({ limit: "200kb" }));
+app.use(cookieParser());
 
 //app.use(bodyParser.urlencoded({ extended: false })); // commented out due to test reasons
 
