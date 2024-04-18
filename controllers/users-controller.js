@@ -91,7 +91,6 @@ const login = asyncWrapper(async (req, res, next) => {
 });
 
 //user logout
-//TO DO: token must be removed from local storage in frontend!!!
 const logout = asyncWrapper(async (req, res, next) => {
   res
     .cookie("access_token", "", { httpOnly: true, maxAge: 0 })

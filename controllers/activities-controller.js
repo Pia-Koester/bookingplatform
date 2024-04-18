@@ -23,7 +23,7 @@ const createActivity = asyncWrapper(async (req, res, next) => {
   //defining the weekdays for different filter functions
   const start = new Date(startTime);
   const options = { weekday: "long" };
-  const weekday = new Intl.DateTimeFormat("en-En", options).format(start);
+  const weekday = new Intl.DateTimeFormat("de-De", options).format(start);
 
   const activity = await Activity.create({
     title,
