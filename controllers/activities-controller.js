@@ -83,8 +83,8 @@ const getActivity = asyncWrapper(async (req, res, next) => {
   const { activity_id } = req.params;
   const activity = await Activity.findById(activity_id)
     .populate("registeredUsers")
-    .populate("type")
-    .populate("instructor"); // TODO: .populate("waitlist.waitlistUsers") is this the correct way??
+    .populate("type");
+  //.populate("instructor"); // TODO: .populate("waitlist.waitlistUsers") is this the correct way??
   if (!activity) {
     throw new ErrorResponse("Activity not found", 404);
   }
