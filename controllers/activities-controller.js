@@ -73,7 +73,7 @@ const getActivities = asyncWrapper(async (req, res, next) => {
       .sort({
         startTime: "asc",
       });
-
+    console.log("request was received in getActivities");
     res.json(activities);
   }
 });
