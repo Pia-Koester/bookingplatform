@@ -20,14 +20,12 @@ const { connectDB } = require("./db.js");
 //Middlewares
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://artemis-sports.de/"],
+    origin: ["http://localhost:5173", "https://artemis-sports.de"],
     credentials: true,
   })
 );
 app.use(express.json({ limit: "200kb" }));
 app.use(cookieParser());
-
-//app.use(bodyParser.urlencoded({ extended: false })); // commented out due to test reasons
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
