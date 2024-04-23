@@ -20,7 +20,7 @@ const { connectDB } = require("./db.js");
 //Middlewares
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://artemis-sports.de/"],
     credentials: true,
   })
 );
