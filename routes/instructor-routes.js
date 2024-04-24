@@ -11,12 +11,7 @@ const instructorRouter = express.Router();
 
 instructorRouter
   .route("")
-  .post(
-    authenticate,
-    authorize("admin"),
-    upload.single("image"),
-    createInstructor
-  )
+  .post(authenticate, authorize("admin"), createInstructor)
   .get(getInstructors);
 
 module.exports = instructorRouter;
