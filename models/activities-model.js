@@ -12,6 +12,12 @@ const addressSchema = new Schema({
   postalCode: { type: String, required: true },
 });
 
+const trialMembershipSchema = new Schema({
+  trialPossible: { type: Boolean, default: true },
+  limitTrialSessions: { type: Number, default: 3 },
+  trialSessionsUsed: { type: Number, default: 0 },
+});
+
 const activitySchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },

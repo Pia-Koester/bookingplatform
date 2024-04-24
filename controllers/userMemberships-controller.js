@@ -62,9 +62,40 @@ const getUserMembershipById = asyncWrapper(async (req, res, next) => {
   }
 });
 
+const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
+  const { id, activeMembership } = req.user;
+  const { activity } = req;
+
+  const userMembership = await UserMembership.findByIdAndUpdate(
+    activeMembership,
+
+    { $inc: { usedCredits: 1 } },
+    { new: true, populate: "plan" }
+  );
+
+  if (userMembership.usedCredits === userMembership.plan.totalCredits) {
+    userMembership.status = "inactive";
+
+    await userMembership.save();
+  }
+
+  if (userMembership.usedCredits > userMembership.plan.totalCredits) {
+    userMembership.usedCredits = userMembership.plan.totalCredits;
+    await userMembership.save();
+
+    throw new ErrorResponse("No credits remaining!", 409);
+  }
+
+  res.send({
+    activity,
+    user: { ...req.user._doc, activeMembership: userMembership },
+  });
+});
+
 //exporting the functions to use them in the routes
 module.exports = {
   createUserMembership,
   getUserMemberships,
   getUserMembershipById,
+  reduceCreditOfUserMembership,
 };

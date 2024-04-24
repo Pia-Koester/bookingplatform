@@ -114,7 +114,7 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
   );
   req.activity = updatedActivity;
 
-  // next(); TO DO: add other steps in the routes so that everything is properly updated
+  next();
 });
 
 //removing user from class / canceling
