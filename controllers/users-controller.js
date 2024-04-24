@@ -89,6 +89,7 @@ const login = asyncWrapper(async (req, res, next) => {
     httpOnly: true,
     maxAge: 28800000,
     domain: "localhost:5173, .artemis-sports.de",
+    sameSite: "none",
     // secure: true, TO DO set this in prod - not dev
   });
 
