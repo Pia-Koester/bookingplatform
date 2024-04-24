@@ -90,7 +90,7 @@ const login = asyncWrapper(async (req, res, next) => {
     maxAge: 28800000,
     domain: "localhost:5173, .artemis-sports.de",
     sameSite: "lax",
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
   });
 
   console.log("Response Headers:", res.getHeaders());
