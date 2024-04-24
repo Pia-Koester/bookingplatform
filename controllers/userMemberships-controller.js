@@ -66,26 +66,42 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
   const { id, activeMembership } = req.user;
   const { activity } = req;
 
+  // Ensure user has an active membership
+  if (user.activeMembership.status !== "active") {
+    // If the user's membership status is not active, throw an error
+    throw new ErrorResponse("User does not have an active membership", 400);
+  }
+
+  // Find the user's active membership and update consumed credits
   const userMembership = await UserMembership.findByIdAndUpdate(
     activeMembership,
-
-    { $inc: { usedCredits: 1 } },
-    { new: true, populate: "plan" }
+    { $inc: { consumedCredits: 1 } }, // Increment consumedCredits by 1
+    { new: true, populate: "membershipPlan" } // Return the updated document and populate the membershipPlan field
   );
 
-  if (userMembership.usedCredits === userMembership.plan.totalCredits) {
+  // Check if consumed credits reach the available credits in the membership plan
+  if (
+    userMembership.consumedCredits ===
+    userMembership.membershipPlan.availableCredits
+  ) {
+    // If consumed credits reach available credits, set membership status to inactive
     userMembership.status = "inactive";
-
-    await userMembership.save();
+    await userMembership.save(); // Save the updated userMembership
   }
 
-  if (userMembership.usedCredits > userMembership.plan.totalCredits) {
-    userMembership.usedCredits = userMembership.plan.totalCredits;
-    await userMembership.save();
-
-    throw new ErrorResponse("No credits remaining!", 409);
+  // Check if consumed credits exceed available credits in the membership plan
+  if (
+    userMembership.consumedCredits >
+    userMembership.membershipPlan.availableCredits
+  ) {
+    // If consumed credits exceed available credits, set consumedCredits to availableCredits
+    userMembership.consumedCredits =
+      userMembership.membershipPlan.availableCredits;
+    await userMembership.save(); // Save the updated userMembership
+    throw new ErrorResponse("No credits remaining!", 409); // Throw an error indicating no credits remaining
   }
 
+  // Send response with activity and updated user data
   res.send({
     activity,
     user: { ...req.user._doc, activeMembership: userMembership },
