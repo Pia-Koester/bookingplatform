@@ -43,6 +43,7 @@ const userSchema = new Schema({
   dateOfBirth: { type: Date, required: true },
   termsOfUse: { type: Boolean, required: true },
   dataProtectionInfo: { type: Boolean, required: true },
+  trialSessionsUsed: { type: Boolean, default: false },
 });
 
 //creating mongoose middleware to hash passwords and make sure mail adress is lowercase

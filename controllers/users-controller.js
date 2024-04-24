@@ -136,4 +136,52 @@ const setUserMembership = asyncWrapper(async (req, res, next) => {
   res.json(membershipHolder.activeMemberships);
 });
 
-module.exports = { createUser, setUserMembership, login, logout, getProfile };
+// after booking an activity the users registered activities array needs to be filled
+const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
+  const { id } = req.user;
+  const { activity } = req;
+  const { _id: activity_id } = activity; // Destructure directly
+
+  // Retrieve old user data
+  const oldUser = await User.findById(id);
+
+  if (!oldUser) {
+    throw new ErrorResponse("User not found", 404);
+  }
+
+  const { registeredActivities } = oldUser;
+
+  // Check if activity_id is already registered
+  const isRegistered = registeredActivities.includes(activity_id);
+
+  if (isRegistered) {
+    throw new ErrorResponse("User already registered", 409);
+  }
+
+  // Update the user's data
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    { $push: { registeredActivities: activity_id } },
+
+    {
+      new: true,
+      // populate: {
+      //   path: "registeredActivities",
+      //   populate: { path: "instructor", model: "Instructor" },
+      // },
+    }
+  );
+
+  req.user = updatedUser;
+
+  next();
+});
+
+module.exports = {
+  createUser,
+  setUserMembership,
+  login,
+  logout,
+  getProfile,
+  updateActivitiesForUser,
+};

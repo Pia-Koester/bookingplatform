@@ -8,6 +8,13 @@ const {
   unregisterUserFromActivity,
   adminUpdateActivityDetails,
 } = require("../controllers/activities-controller.js");
+const { authenticate, authorize } = require("../middlewares/authentication.js");
+const {
+  reduceCreditOfUserMembership,
+} = require("../controllers/userMemberships-controller.js");
+const {
+  updateActivitiesForUser,
+} = require("../controllers/users-controller.js");
 
 const activityRouter = express.Router();
 
@@ -15,7 +22,12 @@ activityRouter.route("/").post(createActivity).get(getActivities);
 activityRouter
   .route("/:activity_id")
   .get(getActivity)
-  .put(registerUserForActivity);
+  .put(
+    authenticate,
+    registerUserForActivity,
+    updateActivitiesForUser,
+    reduceCreditOfUserMembership
+  );
 
 activityRouter.route("/:activity_id/cancel").put(unregisterUserFromActivity);
 
