@@ -3,6 +3,7 @@ const ErrorResponse = require("../utils/errorResponse.js");
 
 const authenticate = (req, res, next) => {
   try {
+    console.log("cookies received:", req.cookies);
     const { access_token: token } = req.cookies;
 
     if (!token) {
