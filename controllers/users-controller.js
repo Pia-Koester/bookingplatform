@@ -111,7 +111,7 @@ const getProfile = asyncWrapper(async (req, res, next) => {
   const user = await User.findById(id)
     .populate({
       path: "registeredActivities",
-      // populate: { path: "instructor", model: "Instructor" },
+      populate: { path: "instructor", model: "Instructor" },
     })
     .populate({
       path: "activeMemberships",
@@ -167,10 +167,10 @@ const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
 
     {
       new: true,
-      // populate: {
-      //   path: "registeredActivities",
-      //   populate: { path: "instructor", model: "Instructor" },
-      // },
+      populate: {
+        path: "registeredActivities",
+        populate: { path: "instructor", model: "Instructor" },
+      },
     }
   );
 

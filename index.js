@@ -16,6 +16,7 @@ const membershipPlanRouter = require("./routes/membershipPlans-routes.js");
 const userMembershipRouter = require("./routes/userMemberships-routes.js");
 const typeRouter = require("./routes/activityTypes-routes.js");
 const { connectDB } = require("./db.js");
+const instructorRouter = require("./routes/instructor-routes.js");
 
 //Middlewares
 app.use(
@@ -37,6 +38,7 @@ app.use("/api/activities", activityRouter);
 app.use("/api/membershipplan", membershipPlanRouter); //TO DO: naming in url too long?
 app.use("/api/usermemberships", userMembershipRouter);
 app.use("/api/types", typeRouter);
+app.use("/api/instructors", instructorRouter);
 
 connectDB().then(() => {
   app.listen(port, () => {
