@@ -21,8 +21,8 @@ const instructorRouter = require("./routes/instructor-routes.js");
 //Middlewares
 app.use(
   cors({
-    // origin: ["http://localhost:5173", "https://artemis-sports.de"],
-    origin: true,
+    origin: ["http://localhost:5173", "https://artemis-sports.de"],
+
     credentials: true,
   })
 );
