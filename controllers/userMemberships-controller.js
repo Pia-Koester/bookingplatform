@@ -66,11 +66,17 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
   const { id, activeMembership } = req.user;
   const { activity } = req;
 
-  // // Ensure user has an active membership
-  // if (activeMembership.status !== "active") {
-  //   // If the user's membership status is not active, throw an error
-  //   throw new ErrorResponse("User does not have an active membership", 400);
-  // }
+  // Find the user's active membership
+  const userActiveMemberships = await UserMembership.find({
+    user: req.user._id,
+    membershipStatus: "active",
+  });
+
+  if (userActiveMemberships.length === 0) {
+    // If no active memberships found, do nothing and return
+    res.send({ message: "No active membership found." });
+    return;
+  }
 
   // Find the user's active membership and update consumed credits
   const userMembership = await UserMembership.findByIdAndUpdate(
