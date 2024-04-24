@@ -85,14 +85,16 @@ const login = asyncWrapper(async (req, res, next) => {
 
   delete user.password;
 
-  res
-    .cookie("access_token", token, {
-      httpOnly: true,
-      maxAge: 28800000,
-      domain: "localhost:5173, .artemis-sports.de",
-      // secure: true, TO DO set this in prod - not dev
-    })
-    .json(user);
+  res.cookie("access_token", token, {
+    httpOnly: true,
+    maxAge: 28800000,
+    domain: "localhost:5173, .artemis-sports.de",
+    // secure: true, TO DO set this in prod - not dev
+  });
+
+  console.log("Response Headers:", res.getHeaders());
+
+  res.json(user);
 });
 
 //user logout
