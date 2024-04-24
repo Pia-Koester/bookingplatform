@@ -89,7 +89,7 @@ const login = asyncWrapper(async (req, res, next) => {
     .cookie("access_token", token, {
       httpOnly: true,
       maxAge: 28800000,
-      domain: ".artemis-sports.de",
+      domain: "localhost:5173, .artemis-sports.de",
       // secure: true, TO DO set this in prod - not dev
     })
     .json(user);

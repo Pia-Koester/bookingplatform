@@ -16,6 +16,7 @@ const authenticate = (req, res, next) => {
 
     next();
   } catch (error) {
+    console.error("Authentication error:", error); // Log any authentication errors for debugging
     next(error);
   }
 };
