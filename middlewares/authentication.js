@@ -3,6 +3,7 @@ const ErrorResponse = require("../utils/errorResponse.js");
 
 const authenticate = (req, res, next) => {
   try {
+    console.log("cookies received:", req.cookies);
     const { access_token: token } = req.cookies;
 
     if (!token) {
@@ -15,6 +16,7 @@ const authenticate = (req, res, next) => {
 
     next();
   } catch (error) {
+    console.error("Authentication error:", error); // Log any authentication errors for debugging
     next(error);
   }
 };
