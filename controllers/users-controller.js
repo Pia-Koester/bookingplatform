@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users-model.js");
 const asyncWrapper = require("../utils/asyncWrapper.js");
+const ErrorResponse = require("../utils/errorResponse.js");
 
 // ********** Functions relating to the account, login and profile **************
 //create new user
@@ -21,6 +22,7 @@ const createUser = asyncWrapper(async (req, res, next) => {
     postalCode,
     city,
     role = "student",
+    trial,
   } = req.body;
 
   const address = { street, postalCode, city };
@@ -45,12 +47,20 @@ const createUser = asyncWrapper(async (req, res, next) => {
     role,
   });
 
+  if (trial) {
+    req.trial = trial;
+    req.user = user;
+
+    return next();
+  }
+
   res.status(201).json(user);
 });
 
 //user login
 const login = asyncWrapper(async (req, res, next) => {
   const { email, password } = req.body;
+  const { trial } = req;
 
   const user = await User.findOne({ email })
     .select("+password")
@@ -84,8 +94,7 @@ const login = asyncWrapper(async (req, res, next) => {
   });
 
   delete user.password;
-
-  res.cookie("access_token", token, {
+  const cookieOptions = {
     httpOnly: true,
     maxAge: 28800000,
     domain:
@@ -94,9 +103,15 @@ const login = asyncWrapper(async (req, res, next) => {
         : "localhost",
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
     secure: process.env.NODE_ENV === "production",
-  });
+  };
 
-  console.log("Response Headers:", res.getHeaders());
+  req.cookieOptions = cookieOptions;
+  req.token = token;
+  res.cookie("access_token", token, cookieOptions);
+
+  if (trial) {
+    return next();
+  }
 
   res.json(user);
 });
@@ -146,6 +161,7 @@ const setUserMembership = asyncWrapper(async (req, res, next) => {
 const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
   const { id } = req.user;
   const { activity } = req;
+  const { trial } = req;
   const { _id: activity_id } = activity; // Destructure directly
 
   // Retrieve old user data
@@ -165,18 +181,41 @@ const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
   }
 
   // Update the user's data
-  const updatedUser = await User.findByIdAndUpdate(
-    id,
-    { $push: { registeredActivities: activity_id } },
+  c; // Update the user's data
+  let updatedUser;
+  if (trial) {
+    updatedUser = await User.findByIdAndUpdate(
+      id,
+      { $push: { registeredActivities: activity_id }, trialSessionsUsed: true }, // Set trialSessionsUsed to true if trial exists
+      {
+        new: true,
+        populate: {
+          path: "registeredActivities",
+          populate: { path: "instructor", model: "Instructor" },
+        },
+      }
+    );
 
-    {
-      new: true,
-      populate: {
-        path: "registeredActivities",
-        populate: { path: "instructor", model: "Instructor" },
-      },
-    }
-  );
+    res.send({
+      activity,
+      updatedUser,
+    });
+  } else {
+    updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        $push: { registeredActivities: activity_id },
+        trialSessionsUsed: false,
+      }, // Set trialSessionsUsed to false if trial doesn't exist
+      {
+        new: true,
+        populate: {
+          path: "registeredActivities",
+          populate: { path: "instructor", model: "Instructor" },
+        },
+      }
+    );
+  }
 
   req.user = updatedUser;
 
