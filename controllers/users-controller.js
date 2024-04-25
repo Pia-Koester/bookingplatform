@@ -181,7 +181,7 @@ const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
   }
 
   // Update the user's data
-  c; // Update the user's data
+
   let updatedUser;
   if (trial) {
     updatedUser = await User.findByIdAndUpdate(
