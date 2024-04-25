@@ -21,7 +21,9 @@ const {
 const activityRouter = express.Router();
 
 activityRouter.route("/").post(createActivity).get(getActivities);
-activityRouter.route("/:activity_id/trial").post(createUser, login);
+activityRouter
+  .route("/:activity_id/trial")
+  .post(createUser, login, registerUserForActivity, updateActivitiesForUser);
 activityRouter
   .route("/:activity_id")
   .get(getActivity)

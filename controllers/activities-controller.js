@@ -1,5 +1,7 @@
 const Activity = require("../models/activities-model.js");
 const UserMembership = require("../models/userMemberships-model.js");
+const User = require("../models/users-model.js");
+
 const ErrorResponse = require("../utils/errorResponse.js");
 const asyncWrapper = require("../utils/asyncWrapper.js");
 const mongoose = require("mongoose");
@@ -97,6 +99,7 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
   // Extract activity_id from request parameters and user id from request
   const { activity_id } = req.params;
   const { id } = req.user;
+  const { trial } = req;
 
   // Find the activity based on activity_id
   const activity = await Activity.findById(activity_id);
@@ -107,8 +110,21 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
     membershipStatus: "active",
   });
 
-  // Determine the payment status based on the presence of an active membership
-  const paymentStatus = userMembership ? "paid membership" : "pending";
+  // Determine the payment status based on the presence of an active membership or trial
+  let paymentStatus = "pending";
+  if (userMembership) {
+    paymentStatus = "paid membership";
+  } else if (trial) {
+    paymentStatus = "trial";
+  }
+
+  if (
+    trial &&
+    activity.trialMembership.trialSessionsUsed >=
+      activity.trialMembership.limitTrialSessions
+  ) {
+    throw new ErrorResponse("Trial session limit exceeded", 400);
+  }
 
   // Update the activity's registeredUsers array with the new user and payment status
   const updatedActivity = await Activity.findByIdAndUpdate(
@@ -120,13 +136,16 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
           paymentStatus: paymentStatus,
         },
       },
+      $inc: { "trialMembership.trialSessionsUsed": trial ? 1 : 0 }, // Increase trialSessionsUsed if trial is true
     },
     { new: true } // Return the updated document
   );
 
   // Attach the updated activity to the request object for further processing
   req.activity = updatedActivity;
-
+  if (trial) {
+    console.log("success for third middleware: registerUserForActivity");
+  }
   // Move to the next middleware
   next();
 });
