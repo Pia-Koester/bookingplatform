@@ -48,7 +48,6 @@ const createUser = asyncWrapper(async (req, res, next) => {
   });
 
   if (trial) {
-    console.log("success for first middleware: account creation");
     req.trial = trial;
     req.user = user;
 
@@ -111,7 +110,6 @@ const login = asyncWrapper(async (req, res, next) => {
   res.cookie("access_token", token, cookieOptions);
 
   if (trial) {
-    console.log("success for second middleware: login");
     return next();
   }
 
@@ -163,7 +161,7 @@ const setUserMembership = asyncWrapper(async (req, res, next) => {
 const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
   const { id } = req.user;
   const { activity } = req;
-  const { token, cookieOptions, trial } = req;
+  const { trial } = req;
   const { _id: activity_id } = activity; // Destructure directly
 
   // Retrieve old user data
@@ -198,8 +196,6 @@ const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
       }
     );
 
-    console.log("Success for final step: updateActivitiesForUser");
-    // res.cookie("access_token", token, cookieOptions);
     res.send({
       activity,
       updatedUser,
@@ -222,14 +218,7 @@ const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
   }
 
   req.user = updatedUser;
-  // if (trial) {
-  //   console.log("Success for final step: updateActivitiesForUser");
-  //   // res.cookie("access_token", token, cookieOptions);
-  //   res.send({
-  //     activity,
-  //     updatedUser,
-  //   });
-  // }
+
   next();
 });
 

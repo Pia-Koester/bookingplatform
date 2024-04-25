@@ -76,7 +76,6 @@ const getActivities = asyncWrapper(async (req, res, next) => {
       .sort({
         startTime: "asc",
       });
-    console.log("request was received in getActivities");
     res.json(activities);
   }
 });
@@ -143,9 +142,7 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
 
   // Attach the updated activity to the request object for further processing
   req.activity = updatedActivity;
-  if (trial) {
-    console.log("success for third middleware: registerUserForActivity");
-  }
+
   // Move to the next middleware
   next();
 });
