@@ -1,4 +1,5 @@
 const Activity = require("../models/activities-model.js");
+const UserMembership = require("../models/userMemberships-model.js");
 const ErrorResponse = require("../utils/errorResponse.js");
 const asyncWrapper = require("../utils/asyncWrapper.js");
 const mongoose = require("mongoose");
