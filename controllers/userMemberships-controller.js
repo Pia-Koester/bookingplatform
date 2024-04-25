@@ -71,11 +71,13 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
     user: req.user._id,
     membershipStatus: "active",
   });
-
+  // what happens if user has no membership?
   if (userActiveMemberships.length === 0) {
-    // If no active memberships found, do nothing and return
-    res.send({ message: "No active membership found." });
-    return;
+    // If no active memberships found, booking is still possible, no credits consumed
+    return res.send({
+      activity, // activity already contains the new user data from middleware before
+      user: req.user, // Send user data without changes
+    });
   }
 
   // Find the user's active membership and update consumed credits

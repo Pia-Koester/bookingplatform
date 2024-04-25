@@ -92,34 +92,33 @@ const getActivity = asyncWrapper(async (req, res, next) => {
   res.json(activity);
 });
 
-// Function to register a user for an activity
 const registerUserForActivity = asyncWrapper(async (req, res, next) => {
   // Extract activity_id from request parameters and user id from request
   const { activity_id } = req.params;
   const { id } = req.user;
 
   // Find the activity based on activity_id
-  const oldActivity = await Activity.findById(activity_id);
+  const activity = await Activity.findById(activity_id);
 
-  // Extract the array of registered users from the found activity
-  const userArray = oldActivity.registeredUsers;
+  // Check if the user has an active membership
+  const userMembership = await UserMembership.findOne({
+    user: id,
+    membershipStatus: "active",
+  });
 
-  // Check if the user is already registered for the activity
-  const match = userArray.includes(id);
+  // Determine the payment status based on the presence of an active membership
+  const paymentStatus = userMembership ? "paid membership" : "pending";
 
-  // If the user is already registered, throw an error
-  if (match) {
-    throw new ErrorResponse("This user has already registered", 409);
-  } else {
-    // If the user is not registered, add the user's id to the registeredUsers array
-    userArray.push(id);
-  }
-
-  // Update the activity's registeredUsers array with the new user added
+  // Update the activity's registeredUsers array with the new user and payment status
   const updatedActivity = await Activity.findByIdAndUpdate(
     activity_id,
     {
-      registeredUsers: userArray,
+      $push: {
+        registeredUsers: {
+          user: id,
+          paymentStatus: paymentStatus,
+        },
+      },
     },
     { new: true } // Return the updated document
   );
@@ -130,6 +129,45 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
   // Move to the next middleware
   next();
 });
+
+// // Function to register a user for an activity
+// const registerUserForActivity = asyncWrapper(async (req, res, next) => {
+//   // Extract activity_id from request parameters and user id from request
+//   const { activity_id } = req.params;
+//   const { id } = req.user;
+
+//   // Find the activity based on activity_id
+//   const oldActivity = await Activity.findById(activity_id);
+
+//   // Extract the array of registered users from the found activity
+//   const userArray = oldActivity.registeredUsers;
+
+//   // Check if the user is already registered for the activity
+//   const match = userArray.includes(id);
+
+//   // If the user is already registered, throw an error
+//   if (match) {
+//     throw new ErrorResponse("This user has already registered", 409);
+//   } else {
+//     // If the user is not registered, add the user's id to the registeredUsers array
+//     userArray.push(id);
+//   }
+
+//   // Update the activity's registeredUsers array with the new user added
+//   const updatedActivity = await Activity.findByIdAndUpdate(
+//     activity_id,
+//     {
+//       registeredUsers: userArray,
+//     },
+//     { new: true } // Return the updated document
+//   );
+
+//   // Attach the updated activity to the request object for further processing
+//   req.activity = updatedActivity;
+
+//   // Move to the next middleware
+//   next();
+// });
 
 //removing user from class / canceling
 const unregisterUserFromActivity = asyncWrapper(async (req, res, next) => {
