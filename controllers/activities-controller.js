@@ -60,7 +60,8 @@ const getActivities = asyncWrapper(async (req, res, next) => {
     let filter = {
       startTime: {
         $gte: new Date(start),
-        $lte: new Date(end),
+        // Adjust the end date to include activities up to 23:59 of the end date
+        $lte: new Date(new Date(end).setHours(23, 59, 59, 999)),
       },
     };
 
