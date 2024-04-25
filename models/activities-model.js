@@ -48,13 +48,13 @@ const activitySchema = new Schema({
       user: { type: Schema.Types.ObjectId, ref: "User" },
       paymentStatus: {
         type: String,
-        enum: ["pending", "paid card", "paid cash", "paid membership"],
+        enum: ["pending", "paid card", "paid cash", "paid membership", "trial"],
         default: "pending",
       },
     },
     //TO DO: 10er Karte soll erst abgebucht werden - wenn 24h vor Kursstart nicht abgemeldet
   ],
-  trialMembership: { type: Boolean, default: true },
+  trialMembership: trialMembershipSchema,
   type: { type: Schema.Types.ObjectId, ref: "Activitytype" },
   singlePayOnly: { type: Boolean, defaul: false },
   // To Do: if singlePayOnly is true no booking using membership is possible

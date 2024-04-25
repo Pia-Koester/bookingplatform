@@ -21,6 +21,7 @@ const createUser = asyncWrapper(async (req, res, next) => {
     postalCode,
     city,
     role = "student",
+    trial,
   } = req.body;
 
   const address = { street, postalCode, city };
@@ -43,7 +44,15 @@ const createUser = asyncWrapper(async (req, res, next) => {
     dataProtectionInfo,
     address,
     role,
+    trialSessionsUsed: trial,
   });
+
+  if (trial) {
+    req.trial = trial;
+    console.log("success for first too middlewares");
+    return;
+    // next();
+  }
 
   res.status(201).json(user);
 });
@@ -51,6 +60,7 @@ const createUser = asyncWrapper(async (req, res, next) => {
 //user login
 const login = asyncWrapper(async (req, res, next) => {
   const { email, password } = req.body;
+  const { trial } = req;
 
   const user = await User.findOne({ email })
     .select("+password")
@@ -97,7 +107,9 @@ const login = asyncWrapper(async (req, res, next) => {
   });
 
   console.log("Response Headers:", res.getHeaders());
-
+  if (trial) {
+    return next();
+  }
   res.json(user);
 });
 
