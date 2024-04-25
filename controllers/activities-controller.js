@@ -15,12 +15,13 @@ const createActivity = asyncWrapper(async (req, res, next) => {
     title,
     description,
     capacity,
-    // waitlist,
     instructor,
-    //location,
     startTime,
     endTime,
     type,
+    trialPossible,
+    limitTrialSessions,
+    trialSessionsUsed,
   } = req.body;
 
   //defining the weekdays for different filter functions
@@ -28,6 +29,7 @@ const createActivity = asyncWrapper(async (req, res, next) => {
   const options = { weekday: "long" };
   const weekday = new Intl.DateTimeFormat("de-De", options).format(start);
 
+  const trialInfos = { trialPossible, limitTrialSessions, trialSessionsUsed };
   const activity = await Activity.create({
     title,
     description,
@@ -37,6 +39,7 @@ const createActivity = asyncWrapper(async (req, res, next) => {
     endTime,
     weekday,
     type,
+    trialMembership: trialInfos,
   });
   res.status(201).json(activity);
 });

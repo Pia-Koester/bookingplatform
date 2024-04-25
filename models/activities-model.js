@@ -13,9 +13,9 @@ const addressSchema = new Schema({
 });
 
 const trialMembershipSchema = new Schema({
-  trialPossible: { type: Boolean, default: true },
-  limitTrialSessions: { type: Number, default: 3 },
-  trialSessionsUsed: { type: Number, default: 0 },
+  trialPossible: { type: Boolean, default: true, required: true },
+  limitTrialSessions: { type: Number, default: 3, required: true },
+  trialSessionsUsed: { type: Number, default: 0, required: true },
 });
 
 const activitySchema = new Schema({
