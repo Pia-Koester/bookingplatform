@@ -5,6 +5,8 @@ const membershipPlanSchema = new Schema({
   price: { type: Number, required: true },
   membershipDuration: { type: Number },
   availableCredits: { type: Number, required: true },
+  description: { type: String },
+  image: { type: String },
   bookableType: {
     // This is to differentiate between different forms of activity in case certain memberships only allow booking of certain types
     type: Schema.Types.ObjectId,

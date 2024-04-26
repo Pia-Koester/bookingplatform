@@ -4,14 +4,24 @@ const asyncWrapper = require("../utils/asyncWrapper.js");
 
 //create new membership plan (like 10er Karte, unlimited offer etc)
 const createMembershipPlan = asyncWrapper(async (req, res, next) => {
-  const { title, price, availableCredits, membershipDuration, bookableType } =
-    req.body;
+  const {
+    title,
+    price,
+    availableCredits,
+    membershipDuration,
+    bookableType,
+    image,
+    description,
+  } = req.body;
+  console.log("received", req.body);
   const plan = await MembershipPlan.create({
     title,
     price,
     availableCredits,
     membershipDuration,
     bookableType,
+    image,
+    description,
   });
   res.status(201).json(plan);
 });
