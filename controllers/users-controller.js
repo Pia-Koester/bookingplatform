@@ -101,7 +101,7 @@ const login = asyncWrapper(async (req, res, next) => {
       process.env.NODE_ENV === "production"
         ? ".artemis-sports.de"
         : "localhost",
-    sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+    sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
   };
 

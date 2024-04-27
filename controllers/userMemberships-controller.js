@@ -11,7 +11,7 @@ const createUserMembership = asyncWrapper(async (req, res, next) => {
   const existingMembership = await UserMembership.findOne({
     user,
     membershipStatus: "active",
-    membershipPlan: membershipPlan,
+    membershipPlan,
   }).populate("membershipPlan");
 
   if (existingMembership) {
@@ -79,14 +79,14 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
       user: req.user, // Send user data without changes
     });
   }
-
+  console.log(userActiveMemberships);
   // Find the user's active membership and update consumed credits
   const userMembership = await UserMembership.findByIdAndUpdate(
     activeMembership,
     { $inc: { consumedCredits: 1 } }, // Increment consumedCredits by 1
     { new: true, populate: "membershipPlan" } // Return the updated document and populate the membershipPlan field
   );
-
+  console.log(userMembership);
   // Check if consumed credits reach the available credits in the membership plan
   if (
     userMembership.consumedCredits ===
