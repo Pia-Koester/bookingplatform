@@ -68,7 +68,7 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
 
   // Find the user's active membership
   const userActiveMemberships = await UserMembership.find({
-    user: req.user._id,
+    user: id,
     membershipStatus: "active",
   });
   // what happens if user has no membership?

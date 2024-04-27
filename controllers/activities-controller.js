@@ -104,6 +104,8 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
   const { id } = req.user;
   const { trial } = req;
 
+  console.log("this is from the activities controller", req.user);
+  console.log(req);
   // Find the activity based on activity_id
   const activity = await Activity.findById(activity_id);
 
