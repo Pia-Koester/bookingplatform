@@ -63,7 +63,7 @@ const getUserMembershipById = asyncWrapper(async (req, res, next) => {
 });
 
 const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
-  const { id, activeMembership } = req.user;
+  const { id } = req.user;
   const { activity } = req;
 
   // Find the user's active membership
@@ -80,39 +80,51 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
     });
   }
   console.log(userActiveMemberships);
-  // Find the user's active membership and update consumed credits
-  const userMembership = await UserMembership.findByIdAndUpdate(
-    activeMembership,
-    { $inc: { consumedCredits: 1 } }, // Increment consumedCredits by 1
-    { new: true, populate: "membershipPlan" } // Return the updated document and populate the membershipPlan field
+  // Find the active membership that matches the bookableType of the activity
+  const matchingMembership = userActiveMemberships.find(
+    (membership) =>
+      membership.membershipPlan.bookableType.toString() ===
+      activity._id.toString()
   );
-  console.log(userMembership);
-  // Check if consumed credits reach the available credits in the membership plan
-  if (
-    userMembership.consumedCredits ===
-    userMembership.membershipPlan.availableCredits
-  ) {
-    // If consumed credits reach available credits, set membership status to inactive
-    userMembership.status = "inactive";
-    await userMembership.save(); // Save the updated userMembership
+
+  // Check if a matching membership is found
+  if (!matchingMembership) {
+    // If no matching membership found for the activity, return appropriate response
+    return res.send({
+      activity,
+      user: req.user,
+      message: "No active membership found for this activity.",
+    });
   }
+
+  // Update consumed credits for the matching membership
+  matchingMembership.consumedCredits += 1;
 
   // Check if consumed credits exceed available credits in the membership plan
   if (
-    userMembership.consumedCredits >
-    userMembership.membershipPlan.availableCredits
+    matchingMembership.consumedCredits >
+    matchingMembership.membershipPlan.availableCredits
   ) {
-    // If consumed credits exceed available credits, set consumedCredits to availableCredits
-    userMembership.consumedCredits =
-      userMembership.membershipPlan.availableCredits;
-    await userMembership.save(); // Save the updated userMembership
+    matchingMembership.consumedCredits =
+      matchingMembership.membershipPlan.availableCredits;
+    await matchingMembership.save(); // Save the updated membership
     throw new ErrorResponse("No credits remaining!", 409); // Throw an error indicating no credits remaining
   }
+
+  // Check if consumed credits reach the available credits in the membership plan
+  if (
+    matchingMembership.consumedCredits ===
+    matchingMembership.membershipPlan.availableCredits
+  ) {
+    matchingMembership.status = "inactive"; // Set membership status to inactive
+  }
+
+  await matchingMembership.save(); // Save the updated membership
 
   // Send response with activity and updated user data
   res.send({
     activity,
-    user: { ...req.user._doc, activeMembership: userMembership },
+    user: { ...req.user._doc, activeMembership: matchingMembership },
   });
 });
 
