@@ -117,7 +117,10 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
   let paymentStatus = "pending";
   console.log("activities controller: User membership: ", userMembership);
   console.log("activities controller: Activity type: ", activity.type);
-  if (userMembership.membershipPlan.type === activity.type) {
+  if (
+    userMembership.membershipPlan.bookableType.toString() ===
+    activity.type.toString()
+  ) {
     console.log(
       "User has an active membership for this activity type- logged from activities controller"
     );
