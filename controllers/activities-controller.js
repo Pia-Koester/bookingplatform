@@ -111,13 +111,13 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
   const userMembership = await UserMembership.findOne({
     user: id,
     membershipStatus: "active",
-  });
+  }).populate("membershipPlan");
 
   // Determine the payment status based on the presence of an active membership or trial
   let paymentStatus = "pending";
   console.log("activities controller: User membership: ", userMembership);
   console.log("activities controller: Activity type: ", activity.type);
-  if (userMembership.membershipPlan.type === activity) {
+  if (userMembership.membershipPlan.type === activity.type) {
     console.log(
       "User has an active membership for this activity type- logged from activities controller"
     );
