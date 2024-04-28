@@ -115,7 +115,9 @@ const registerUserForActivity = asyncWrapper(async (req, res, next) => {
 
   // Determine the payment status based on the presence of an active membership or trial
   let paymentStatus = "pending";
-  if (userMembership.membershipPlan.type === activity.type) {
+  console.log("activities controller: User membership: ", userMembership);
+  console.log("activities controller: Activity type: ", activity.type);
+  if (userMembership.membershipPlan.type === activity) {
     console.log(
       "User has an active membership for this activity type- logged from activities controller"
     );

@@ -84,9 +84,12 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
   const matchingMembership = userActiveMemberships.find(
     (membership) =>
       membership.membershipPlan.bookableType.toString() ===
-      activity._id.toString()
+      activity.type.toString()
   );
-
+  console.log(
+    "type of activity from usermembership controller",
+    activity.type.toString()
+  );
   // Check if a matching membership is found
   if (!matchingMembership) {
     console.log(
