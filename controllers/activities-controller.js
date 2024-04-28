@@ -88,7 +88,10 @@ const getActivities = asyncWrapper(async (req, res, next) => {
 const getActivity = asyncWrapper(async (req, res, next) => {
   const { activity_id } = req.params;
   const activity = await Activity.findById(activity_id)
-    .populate("registeredUsers")
+    .populate({
+      path: "registeredUsers",
+      populate: { path: "user" }, // Populate the 'user' field inside 'registeredUsers'
+    })
     .populate("type")
     .populate("instructor"); // TODO: .populate("waitlist.waitlistUsers") is this the correct way??
   if (!activity) {
@@ -186,7 +189,37 @@ const unregisterUserFromActivity = asyncWrapper(async (req, res, next) => {
   next();
 });
 
-//only admins: update activity details
+//only admins: changing payment status and updating activity details
+//Change payment status depending on the payment method
+const updatePaymentStatusforActivity = asyncWrapper(async (req, res, next) => {
+  const { activity_id } = req.params;
+  const { user_id, paymentStatus } = req.body;
+
+  const activity = await Activity.findById(activity_id);
+
+  const userArray = activity.registeredUsers;
+  console.log(userArray);
+  const user = userArray.find((user) => user.user.toString() === user_id);
+
+  if (!user) {
+    throw new ErrorResponse("User not found in activity", 404);
+  }
+
+  user.paymentStatus = paymentStatus;
+  console.log("after update", userArray);
+  const updatedActivity = await Activity.findByIdAndUpdate(
+    activity_id,
+    {
+      registeredUsers: userArray,
+    },
+    { new: true }
+  );
+
+  req.activity = updatedActivity;
+
+  res.send(updatedActivity);
+});
+
 //TO DO: inform users if time has been changed
 const adminUpdateActivityDetails = asyncWrapper(async (req, res, next) => {
   const { activity_id } = req.params;
@@ -224,4 +257,5 @@ module.exports = {
   registerUserForActivity,
   unregisterUserFromActivity,
   adminUpdateActivityDetails,
+  updatePaymentStatusforActivity,
 };

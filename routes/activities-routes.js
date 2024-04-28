@@ -7,6 +7,7 @@ const {
   registerUserForActivity,
   unregisterUserFromActivity,
   adminUpdateActivityDetails,
+  updatePaymentStatusforActivity,
 } = require("../controllers/activities-controller.js");
 const { authenticate, authorize } = require("../middlewares/authentication.js");
 const {
@@ -37,5 +38,7 @@ activityRouter
 activityRouter.route("/:activity_id/cancel").put(unregisterUserFromActivity);
 
 activityRouter.route("/admin/:activity_id").put(adminUpdateActivityDetails); //TO DO: authenticate and authorize only admins
-
+activityRouter
+  .route("/admin/:activity_id/payment")
+  .put(updatePaymentStatusforActivity); //TO DO: authenticate and authorize only admins
 module.exports = activityRouter;
