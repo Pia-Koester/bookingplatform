@@ -70,7 +70,7 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
   const userActiveMemberships = await UserMembership.find({
     user: id,
     membershipStatus: "active",
-  });
+  }).populate("membershipPlan");
   // what happens if user has no membership?
   if (userActiveMemberships.length === 0) {
     // If no active memberships found, booking is still possible, no credits consumed
