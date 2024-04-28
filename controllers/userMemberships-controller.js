@@ -1,5 +1,6 @@
 const UserMembership = require("../models/userMemberships-model.js");
 const ErrorResponse = require("../utils/errorResponse.js");
+const User = require("../models/users-model.js");
 const asyncWrapper = require("../utils/asyncWrapper.js");
 
 // after booking a specific membership plan users a new usermembership needs to be created
@@ -79,22 +80,16 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
       user: req.user, // Send user data without changes
     });
   }
-  console.log(userActiveMemberships);
+
   // Find the active membership that matches the bookableType of the activity
   const matchingMembership = userActiveMemberships.find(
     (membership) =>
       membership.membershipPlan.bookableType.toString() ===
       activity.type.toString()
   );
-  console.log(
-    "type of activity from usermembership controller",
-    activity.type.toString()
-  );
+
   // Check if a matching membership is found
   if (!matchingMembership) {
-    console.log(
-      "no matching membership found - logged from userMemberships-controller"
-    );
     // If no matching membership found for the activity, return appropriate response
     return res.send({
       activity,
@@ -103,9 +98,6 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
     });
   }
 
-  if (matchingMembership) {
-    console.log("matchingmembership found", matchingMembership);
-  }
   // Update consumed credits for the matching membership
   matchingMembership.consumedCredits += 1;
 
@@ -130,10 +122,21 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
 
   await matchingMembership.save(); // Save the updated membership
 
+  // Populate the updated user with registeredActivities and activeMemberships
+  const updatedUser = await User.findById(id)
+    .populate({
+      path: "registeredActivities",
+      populate: { path: "instructor", model: "Instructor" },
+    })
+    .populate({
+      path: "activeMemberships",
+      populate: { path: "membershipPlan", model: "MembershipPlan" },
+    });
+
   // Send response with activity and updated user data
   res.send({
     activity,
-    user: { ...req.user._doc, activeMembership: matchingMembership },
+    user: updatedUser,
   });
 });
 
