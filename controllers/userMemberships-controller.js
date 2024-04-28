@@ -89,6 +89,9 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
 
   // Check if a matching membership is found
   if (!matchingMembership) {
+    console.log(
+      "no matching membership found - logged from userMemberships-controller"
+    );
     // If no matching membership found for the activity, return appropriate response
     return res.send({
       activity,
@@ -97,6 +100,9 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
     });
   }
 
+  if (matchingMembership) {
+    console.log("matchingmembership found", matchingMembership);
+  }
   // Update consumed credits for the matching membership
   matchingMembership.consumedCredits += 1;
 
