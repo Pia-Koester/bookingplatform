@@ -195,11 +195,6 @@ const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
         },
       }
     );
-
-    res.send({
-      activity,
-      updatedUser,
-    });
   } else {
     updatedUser = await User.findByIdAndUpdate(
       id,
