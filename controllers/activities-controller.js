@@ -223,12 +223,22 @@ const updatePaymentStatusforActivity = asyncWrapper(async (req, res, next) => {
 //TO DO: inform users if time has been changed
 const adminUpdateActivityDetails = asyncWrapper(async (req, res, next) => {
   const { activity_id } = req.params;
-  const { title, description, instructor, capacity, startTime, endTime, type } =
-    req.body;
+  const {
+    title,
+    description,
+    instructor,
+    capacity,
+    startTime,
+    endTime,
+    type,
+    trialPossible,
+    limitTrialSessions,
+  } = req.body;
+  console.log(req.body);
 
   const start = new Date(startTime);
   const options = { weekday: "long" };
-  const weekday = new Intl.DateTimeFormat("en-En", options)
+  const weekday = new Intl.DateTimeFormat("de-DE", options)
     .format(start)
     .toLowerCase();
 
@@ -243,6 +253,8 @@ const adminUpdateActivityDetails = asyncWrapper(async (req, res, next) => {
       endTime,
       type,
       weekday,
+      trialPossible,
+      limitTrialSessions,
     },
     { new: true }
   );
