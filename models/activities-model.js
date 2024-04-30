@@ -58,6 +58,7 @@ const activitySchema = new Schema({
   type: { type: Schema.Types.ObjectId, ref: "Activitytype" },
   singlePayOnly: { type: Boolean, defaul: false },
   // To Do: if singlePayOnly is true no booking using membership is possible
+  singlePayPrice: { type: Number },
 });
 
 activitySchema.pre("save", async function (next) {

@@ -140,10 +140,41 @@ const reduceCreditOfUserMembership = asyncWrapper(async (req, res, next) => {
   });
 });
 
+// ********** Functions relating to payments **************
+// updating payment status of a membership
+const updatePaymentStatus = asyncWrapper(async (req, res, next) => {
+  const { usermembershipId } = req.params;
+  const { paymentStatus } = req.body;
+  console.log(usermembershipId, paymentStatus);
+
+  try {
+    // Find the userMembership by ID and update its payment status
+    const userMembership = await UserMembership.findByIdAndUpdate(
+      usermembershipId,
+      { membershipStatus: paymentStatus },
+      { new: true } // Return the updated document
+    );
+
+    if (!userMembership) {
+      return res.status(404).json({ error: "User membership not found" });
+    }
+
+    // If you have any additional logic or validations, you can add them here
+
+    // Send the updated userMembership as the response
+    res.json(userMembership);
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 //exporting the functions to use them in the routes
 module.exports = {
   createUserMembership,
   getUserMemberships,
   getUserMembershipById,
   reduceCreditOfUserMembership,
+  updatePaymentStatus,
 };
