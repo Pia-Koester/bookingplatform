@@ -221,6 +221,22 @@ const updateActivitiesForUser = asyncWrapper(async (req, res, next) => {
   next();
 });
 
+// ********** Functions relating fetching user data **************
+//getting all the users so that the admin can see them
+const getUsers = asyncWrapper(async (req, res, next) => {
+  const users = await User.find({})
+    .select("-password")
+    .populate({
+      path: "registeredActivities",
+      populate: { path: "instructor", model: "Instructor" },
+    })
+    .populate({
+      path: "activeMemberships",
+      populate: { path: "membershipPlan", model: "MembershipPlan" },
+    });
+  res.json(users);
+});
+
 module.exports = {
   createUser,
   setUserMembership,
@@ -228,4 +244,5 @@ module.exports = {
   logout,
   getProfile,
   updateActivitiesForUser,
+  getUsers,
 };

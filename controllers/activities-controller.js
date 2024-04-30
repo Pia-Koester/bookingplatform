@@ -22,6 +22,7 @@ const createActivity = asyncWrapper(async (req, res, next) => {
     trialPossible,
     limitTrialSessions,
     trialSessionsUsed,
+    singlePayPrice,
   } = req.body;
 
   //defining the weekdays for different filter functions
@@ -40,6 +41,7 @@ const createActivity = asyncWrapper(async (req, res, next) => {
     weekday,
     type,
     trialMembership: trialInfos,
+    singlePayPrice,
   });
   res.status(201).json(activity);
 });
@@ -233,6 +235,7 @@ const adminUpdateActivityDetails = asyncWrapper(async (req, res, next) => {
     type,
     trialPossible,
     limitTrialSessions,
+    singlePayPrice,
   } = req.body;
   console.log(req.body);
 
@@ -255,6 +258,7 @@ const adminUpdateActivityDetails = asyncWrapper(async (req, res, next) => {
       weekday,
       trialPossible,
       limitTrialSessions,
+      singlePayPrice,
     },
     { new: true }
   );
